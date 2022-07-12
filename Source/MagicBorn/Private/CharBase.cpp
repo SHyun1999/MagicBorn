@@ -2,6 +2,7 @@
 
 
 #include "CharBase.h"
+#include "AttributeSetBase.h"
 
 // Sets default values
 ACharBase::ACharBase()
@@ -11,6 +12,8 @@ ACharBase::ACharBase()
 	
 
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComp");
+
+	AttributeSetBaseComp = CreateDefaultSubobject<UAttributeSetBase>("AttributeSetBaseComp");
 }
 
 // Called when the game starts or when spawned
@@ -39,7 +42,7 @@ UAbilitySystemComponent* ACharBase::GetAbilitySystemComponent() const
 	return AbilitySystemComp;
 }
 
-void ACharBase::AquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire)
+void ACharBase::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire)
 {
 
 	if (AbilitySystemComp)

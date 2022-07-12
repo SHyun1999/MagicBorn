@@ -7,7 +7,6 @@
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
 #include "Abilities/GameplayAbility.h"
-
 #include "CharBase.generated.h"
 
 UCLASS()
@@ -33,11 +32,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharBase")
 	UAbilitySystemComponent* AbilitySystemComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharBase")
+	class UAttributeSetBase* AttributeSetBaseComp;
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 
-
 	UFUNCTION(BlueprintCallable, Category = "CharBase")
-		void AquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
+		void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
+
 
 };
