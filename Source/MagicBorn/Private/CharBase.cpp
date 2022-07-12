@@ -14,6 +14,10 @@ ACharBase::ACharBase()
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComp");
 
 	AttributeSetBaseComp = CreateDefaultSubobject<UAttributeSetBase>("AttributeSetBaseComp");
+
+	AttributeSetBaseComp->OnHealthChange.AddDynamic(this, &ACharBase::OnHealthChanged);
+
+	bIsDead = false;
 }
 
 // Called when the game starts or when spawned
@@ -57,5 +61,16 @@ void ACharBase::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire)
 
 		AbilitySystemComp->InitAbilityActorInfo(this, this);
 	}
+}
+
+void ACharBase::OnHealthChanged(float Health, float MaxHealth)
+{
+
+	if (Health <= 0.f && !bIsDead)
+	{
+		bIsDead = true;
+		BP_Die();
+	}
+	BP_OnHealthChanged(Health, MaxHealth);
 }
 
