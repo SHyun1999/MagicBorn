@@ -3,6 +3,9 @@
 
 #include "CharBase.h"
 #include "AttributeSetBase.h"
+#include "GameFramework/PlayerController.h"
+#include "AIController.h"
+#include "BrainComponent.h"
 
 // Sets default values
 ACharBase::ACharBase()
@@ -18,12 +21,14 @@ ACharBase::ACharBase()
 	AttributeSetBaseComp->OnHealthChange.AddDynamic(this, &ACharBase::OnHealthChanged);
 
 	bIsDead = false;
+	TeamID = 255;
 }
 
 // Called when the game starts or when spawned
 void ACharBase::BeginPlay()
 {
 	Super::BeginPlay();
+	AutoDetermineTeamByController();
 	
 }
 
@@ -69,8 +74,39 @@ void ACharBase::OnHealthChanged(float Health, float MaxHealth)
 	if (Health <= 0.f && !bIsDead)
 	{
 		bIsDead = true;
+
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		if (PC)
+		{
+			PC->DisableInput(PC);
+		}
+
+		AAIController* AIC = Cast<AAIController>(GetController());
+
+		if (AIC)
+		{
+			AIC->GetBrainComponent()->StopLogic("Ded");
+		}
 		BP_Die();
 	}
 	BP_OnHealthChanged(Health, MaxHealth);
+}
+
+bool ACharBase::IsOtherHostile(ACharBase* Other)
+{
+	return TeamID != Other->GetTeamID();
+}
+
+uint8 ACharBase::GetTeamID() const
+{
+	return TeamID;
+}
+
+void ACharBase::AutoDetermineTeamByController()
+{
+	if (GetController() && GetController()->IsPlayerController())
+	{
+		TeamID = 0;
+	}
 }
 
