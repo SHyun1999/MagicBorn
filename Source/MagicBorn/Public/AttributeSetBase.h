@@ -11,6 +11,8 @@
  */
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangeDelegate, float, Health, float, MaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnManaChangeDelegate, float, Mana, float, MaxMana);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStrengthChangeDelegate, float, Strength, float, MaxStrength);
 
 UCLASS()
 class MAGICBORN_API UAttributeSetBase : public UAttributeSet
@@ -26,10 +28,23 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AttributeSetBase")
 		FGameplayAttributeData MaxHealth;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AttributeSetBase")
+		FGameplayAttributeData Mana;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AttributeSetBase")
+		FGameplayAttributeData MaxMana;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AttributeSetBase")
+		FGameplayAttributeData Strength;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AttributeSetBase")
+		FGameplayAttributeData MaxStrength;
 	
 
 	void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
-
 	FOnHealthChangeDelegate OnHealthChange;
+	FOnManaChangeDelegate OnManaChange;
+	FOnStrengthChangeDelegate OnStrengthChange;
 };

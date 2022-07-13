@@ -19,9 +19,13 @@ ACharBase::ACharBase()
 	AttributeSetBaseComp = CreateDefaultSubobject<UAttributeSetBase>("AttributeSetBaseComp");
 
 	AttributeSetBaseComp->OnHealthChange.AddDynamic(this, &ACharBase::OnHealthChanged);
+	AttributeSetBaseComp->OnManaChange.AddDynamic(this, &ACharBase::OnManaChanged);
+	AttributeSetBaseComp->OnStrengthChange.AddDynamic(this, &ACharBase::OnStrengthChanged);
 
 	bIsDead = false;
 	TeamID = 255;
+
+	AddGameplayTag(FullHealthTag);
 }
 
 // Called when the game starts or when spawned
@@ -92,9 +96,30 @@ void ACharBase::OnHealthChanged(float Health, float MaxHealth)
 	BP_OnHealthChanged(Health, MaxHealth);
 }
 
+void ACharBase::OnManaChanged(float Mana, float MaxMana)
+{
+	BP_OnManaChanged(Mana, MaxMana);
+}
+
+void ACharBase::OnStrengthChanged(float Strength, float MaxStrength)
+{
+	BP_OnStrengthChanged(Strength, MaxStrength);
+}
+
 bool ACharBase::IsOtherHostile(ACharBase* Other)
 {
 	return TeamID != Other->GetTeamID();
+}
+
+void ACharBase::AddGameplayTag(FGameplayTag& Tag)
+{
+	GetAbilitySystemComponent()->AddLooseGameplayTag(Tag);
+	GetAbilitySystemComponent()->SetTagMapCount(Tag, 1);
+}
+
+void ACharBase::RemoveGameplayTag(FGameplayTag& Tag)
+{
+	GetAbilitySystemComponent()->RemoveLooseGameplayTag(Tag);
 }
 
 uint8 ACharBase::GetTeamID() const

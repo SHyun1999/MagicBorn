@@ -47,11 +47,32 @@ public:
 		void BP_OnHealthChanged(float Health, float MaxHealth);
 
 
+	UFUNCTION()
+		void OnManaChanged(float Mana, float MaxMana);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnManaChanged"))
+		void BP_OnManaChanged(float Mana, float MaxMana);
+
+	UFUNCTION()
+		void OnStrengthChanged(float Strength, float MaxStrength);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnStrengthChanged"))
+		void BP_OnStrengthChanged(float Strength, float MaxStrength);
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "Die"))
 		void BP_Die();
 
 	UFUNCTION(BlueprintCallable, Category = "CharBase")
 		bool IsOtherHostile(ACharBase* Other);
+
+	UFUNCTION(BlueprintCallable, Category = "CharBase")
+		void AddGameplayTag(FGameplayTag &Tag);
+
+	UFUNCTION(BlueprintCallable, Category = "CharBase")
+		void RemoveGameplayTag(FGameplayTag &Tag);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+		FGameplayTag FullHealthTag;
 
 	uint8 GetTeamID() const;
 
